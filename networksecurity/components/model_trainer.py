@@ -15,6 +15,8 @@ from sklearn.ensemble import AdaBoostClassifier,GradientBoostingClassifier,Rando
 
 from sklearn.linear_model import LogisticRegression
 
+import mlflow  # type: ignore
+
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
         try:
@@ -23,6 +25,18 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
     
+    def track_mlflow(self,best_model,classification_matrix):
+        try:
+            with mlflow.start_run():
+                f1_score = classification_matrix.f1_score
+                precision_score = classification_matrix.precision_score
+                recall_score=classification_matrix.recall_score
+                mlflow.log_metric("f1_score",f1_score)
+                mlflow.log_metric("precision_score",precision_score)
+                mlflow.log_metric("recall_score",recall_score)
+                mlflow.sklearn.log_model(best_model,"model")
+        except Exception as e:
+            raise NetworkSecurityException(e,sys)    
 
     def train_model(self,X_train,y_train,X_test,y_test):
         models={
@@ -74,10 +88,11 @@ class ModelTrainer:
 
 
         # Tracl ml flow
-
+        self.track_mlflow(best_model,classification_train_metric)
 
         y_test_pred=best_model.predict(X_test)
         classification_test_metric =get_classicfication_score(y_true=y_test,y_pred=y_test_pred)
+        self.track_mlflow(best_model,classification_test_metric)
 
         preprocessor = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
 
