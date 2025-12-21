@@ -16,6 +16,9 @@ from sklearn.ensemble import AdaBoostClassifier,GradientBoostingClassifier,Rando
 from sklearn.linear_model import LogisticRegression
 
 import mlflow  # type: ignore
+import dagshub
+dagshub.init(repo_owner='suhaskolhe1', repo_name='NetworkSecurity', mlflow=True)
+
 
 class ModelTrainer:
     def __init__(self,model_trainer_config:ModelTrainerConfig,data_transformation_artifact:DataTransformationArtifact):
@@ -32,7 +35,7 @@ class ModelTrainer:
                 precision_score = classification_matrix.precision_score
                 recall_score=classification_matrix.recall_score
                 mlflow.log_metric("f1_score",f1_score)
-                mlflow.log_metric("precision_score",precision_score)
+                mlflow.log_metric("precision_score",precision_score )
                 mlflow.log_metric("recall_score",recall_score)
                 mlflow.sklearn.log_model(best_model,"model")
         except Exception as e:
@@ -101,6 +104,7 @@ class ModelTrainer:
 
         NetWork_model=NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=NetWork_model)
+        save_object("final_model/model.pkl",best_model)
 
 
         ## Model Trainer artificat
