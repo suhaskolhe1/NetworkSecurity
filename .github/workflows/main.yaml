@@ -6,7 +6,10 @@ on:
       - main
     paths-ignore:
       - 'README.md'
-      
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   integration:
     name: Continuous Integration
