@@ -2,19 +2,6 @@
 
 A Machine Learning-based system designed to detect and classify network security threats (specifically phishing) using a comprehensive data pipeline and predictive modeling. This project leverages a robust MLOps workflow, including data ingestion, validation, transformation, model training, and deployment.
 
-## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
-- [Architecture & Workflow](#architecture--workflow)
-- [Project Structure](#project-structure)
-- [Installation & Setup](#installation--setup)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Data Flow & ML Pipeline](#data-flow--ml-pipeline)
-- [Deployment](#deployment)
-- [License](#license)
-
 ## 📖 Project Overview
 
 The **Network Security System** automates the process of identifying malicious network data. It ingests historical phishing data, validates and transforms it, and trains a predictive model. The system exposes the trained model via a **FastAPI** interface for real-time predictions and supports batch prediction through CSV file uploads. It is designed with scalability in mind, utilizing **MongoDB** for data storage and **AWS S3** for artifact management.
